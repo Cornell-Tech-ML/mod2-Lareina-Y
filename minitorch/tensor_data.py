@@ -111,7 +111,26 @@ def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
 
     """
     # TODO: Implement for Task 2.2.
-    raise NotImplementedError("Need to implement for Task 2.2")
+    
+    # Ensuring shape1 is the larger/equal shape
+    if len(shape1) < len(shape2):
+        shape1, shape2 = shape2, shape1
+
+    new_shape = []
+    # Determine the shape from the rightmost
+    for i in range(-1, -len(shape1)-1, -1):
+        if -i <= len(shape2):
+            dim1, dim2 = shape1[i], shape2[i]
+
+            # Check if the dimensions can be broadcasted
+            if dim1 != dim2 and dim1 != 1 and dim2 != 1:
+                raise IndexingError(f"Cannot broadcast shapes {shape1} and {shape2}")  
+                    
+            new_shape.append(max(dim1, dim2))
+        else:
+            new_shape.append(shape1[i])
+ 
+    return tuple(reversed(new_shape))
 
 
 def strides_from_shape(shape: UserShape) -> UserStrides:
