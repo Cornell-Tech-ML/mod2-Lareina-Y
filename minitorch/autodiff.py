@@ -91,15 +91,16 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     sorted_vars = []
 
     def visit(var: Variable) -> None:
-        if var.unique_id in visited:
+        if var.unique_id in visited or var.is_constant():
             return
 
-        for parent in var.parents:
-            visit(parent)
+        if not var.is_leaf():
+            for parent in var.parents:
+                if not parent.is_constant():
+                    visit(parent)
 
         visited.add(var.unique_id)
-        if not var.is_constant():
-            sorted_vars.append(var)
+        sorted_vars.append(var)
 
     visit(variable)
     return reversed(sorted_vars)
