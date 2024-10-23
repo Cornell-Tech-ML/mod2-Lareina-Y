@@ -134,8 +134,12 @@ class Sigmoid(Function):
     def backward(ctx: Context, grad_output: Tensor) -> Tensor:
         """Backward pass for Sigmoid"""
         (sigmoid_result,) = ctx.saved_values
-        sub = 1 - sigmoid_result
-        return grad_output.f.mul_zip(grad_output,  sigmoid_result.f.mul_zip(sigmoid_result, sub))
+        
+        # Derivative of the sigmoid: sigmoid(x) * (1 - sigmoid(x))
+        sub = tensor(1).__sub__(sigmoid_result)
+        sigmoid_derivative = sigmoid_result.f.mul_zip(sigmoid_result, sub)
+
+        return grad_output.f.mul_zip(grad_output, sigmoid_derivative)
 
 class ReLU(Function):
     @staticmethod
@@ -227,16 +231,14 @@ class Permute(Function):
     def forward(ctx: Context, t1: Tensor, *order: int) -> Tensor:
         """Forward pass for Permute"""
         ctx.save_for_backward(order)
-        return t1._new(t1._tensor.permute(*[int(i) for i in order]))
+        return t1._new(t1._tensor.permute(*order))
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tensor:
         """Backward pass for Permute"""
-        (order,) = ctx.saved_values
-        reverse_order = [0] * len(order)  # Revert the permutation
-        for i, j in enumerate(order):
-            reverse_order[j] = i
-        return grad_output._new(grad_output._tensor.permute(*reverse_order))
+        (order) = ctx.saved_values
+        new_order = reversed(order)
+        return grad_output._new(grad_output._tensor.permute(*new_order))
 
 class View(Function):
     @staticmethod

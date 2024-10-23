@@ -356,10 +356,10 @@ class Tensor:
         sum_tensor = self.sum(dim)
         return sum_tensor / sum_tensor.size
 
-    def permute(self, *order: int, dim: Optional[int] = None) -> Tensor:
-        return Permute.apply(self, order)
+    def permute(self, *order: int) -> Tensor:
+        return Permute.apply(self, tensor(np.array(order, dtype=np.int32)))
 
-    def view(self, shape: Tensor, dim: Optional[int] = None) -> Tensor:
+    def view(self, shape: Tensor) -> Tensor:
         return View.apply(self, shape)
 
     def zero_grad_(self) -> None:
