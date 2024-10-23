@@ -13,6 +13,25 @@ def RParam(*shape):
 
 # TODO: Implement for Task 2.5.
 
+class Network(minitorch.Module):
+    def __init__(self, hidden_layers):
+        self.layers = []
+        input_size = 2
+        for hidden_size in hidden_layers:
+            self.layers.append(minitorch.Linear(input_size, hidden_size))
+            input_size = hidden_size
+        self.layers.append(minitorch.Linear(input_size, 1))
+
+        # Initialize parameters randomly using RParam
+        for layer in self.layers:
+            layer.weight = RParam(layer.input_size, layer.output_size)
+            layer.bias = RParam(layer.output_size)
+
+    def forward(self, x):
+        for layer in self.layers:
+            x = layer(x).relu()
+        return x.sigmoid()
+
 def default_log_fn(epoch, total_loss, correct, losses):
     print("Epoch ", epoch, " loss ", total_loss, "correct", correct)
 
