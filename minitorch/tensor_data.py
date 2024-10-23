@@ -37,10 +37,12 @@ def index_to_position(index: Index, strides: Strides) -> int:
     storage based on strides.
 
     Args:
+    ----
         index : index tuple of ints
         strides : tensor strides
 
     Returns:
+    -------
         Position in storage
 
     """
@@ -59,16 +61,17 @@ def to_index(ordinal: int, shape: Shape, out_index: OutIndex) -> None:
     may not be the inverse of `index_to_position`.
 
     Args:
+    ----
         ordinal: ordinal position to convert.
         shape : tensor shape.
         out_index : return index corresponding to position.
 
     """
     # TODO: Implement for Task 2.1.
-    remaining = ordinal # Keep tracking the remaining
-    
+    remaining = ordinal  # Keep tracking the remaining
+
     # Loop over dimensions, from last to first
-    for i in range(len(shape)-1, -1, -1):
+    for i in range(len(shape) - 1, -1, -1):
         out_index[i] = remaining % shape[i]
         remaining //= shape[i]
 
@@ -83,18 +86,20 @@ def broadcast_index(
     removed.
 
     Args:
+    ----
         big_index : multidimensional index of bigger tensor
         big_shape : tensor shape of bigger tensor
         shape : tensor shape of smaller tensor
         out_index : multidimensional index of smaller tensor
 
     Returns:
+    -------
         None
 
     """
     # TODO: Implement for Task 2.2.
     dim_offset = len(big_shape) - len(shape)
-    
+
     for i in range(len(shape)):
         if shape[i] == 1:
             out_index[i] = 0
@@ -106,36 +111,39 @@ def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
     """Broadcast two shapes to create a new union shape.
 
     Args:
+    ----
         shape1 : first shape
         shape2 : second shape
 
     Returns:
+    -------
         broadcasted shape
 
     Raises:
+    ------
         IndexingError : if cannot broadcast
 
     """
     # TODO: Implement for Task 2.2.
-    
+
     # Ensuring shape1 is the larger/equal shape
     if len(shape1) < len(shape2):
         shape1, shape2 = shape2, shape1
 
     new_shape = []
     # Determine the shape from the rightmost
-    for i in range(-1, -len(shape1)-1, -1):
+    for i in range(-1, -len(shape1) - 1, -1):
         if -i <= len(shape2):
             dim1, dim2 = shape1[i], shape2[i]
 
             # Check if the dimensions can be broadcasted
             if dim1 != dim2 and dim1 != 1 and dim2 != 1:
-                raise IndexingError(f"Cannot broadcast shapes {shape1} and {shape2}")  
-                    
+                raise IndexingError(f"Cannot broadcast shapes {shape1} and {shape2}")
+
             new_shape.append(max(dim1, dim2))
         else:
             new_shape.append(shape1[i])
- 
+
     return tuple(reversed(new_shape))
 
 
@@ -191,7 +199,8 @@ class TensorData:
     def is_contiguous(self) -> bool:
         """Check that the layout is contiguous, i.e. outer dimensions have bigger strides than inner dimensions.
 
-        Returns:
+        Returns
+        -------
             bool : True if contiguous
 
         """
@@ -255,9 +264,11 @@ class TensorData:
         """Permute the dimensions of the tensor.
 
         Args:
+        ----
             *order: a permutation of the dimensions
 
         Returns:
+        -------
             New `TensorData` with the same storage and a new dimension order.
 
         """

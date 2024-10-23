@@ -313,16 +313,16 @@ class Tensor:
 
     def __gt__(self, other: TensorLike) -> Tensor:
         return LT.apply(self._ensure_tensor(other), self)
-    
+
     def __neg__(self) -> Tensor:
         return Neg.apply(self)
-    
+
     def __radd__(self, other: TensorLike) -> Tensor:
         return Add.apply(self, self._ensure_tensor(other))
-    
+
     def __rmul__(self, other: TensorLike) -> Tensor:
         return self * self._ensure_tensor(other)
-    
+
     def all(self, dim: Optional[int] = None) -> Tensor:
         if dim is None:
             size = self._ensure_tensor(self.size)
@@ -332,7 +332,7 @@ class Tensor:
 
     def is_close(self, other: TensorLike) -> Tensor:
         return IsClose.apply(self, self._ensure_tensor(other))
-    
+
     def sigmoid(self) -> Tensor:
         return Sigmoid.apply(self)
 
@@ -349,7 +349,7 @@ class Tensor:
         if dim is None:
             size = self._ensure_tensor(self.size)
             return Sum.apply(self.contiguous().view(size), self._ensure_tensor(0))
-        else: 
+        else:
             return Sum.apply(self, self._ensure_tensor(dim))
 
     def mean(self, dim: Optional[int] = None) -> Tensor:
