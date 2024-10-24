@@ -244,17 +244,18 @@ class IsClose(Function):
 
 class Permute(Function):
     @staticmethod
-    def forward(ctx: Context, t1: Tensor, order: List[int]) -> Tensor:
+    def forward(ctx: Context, t1: Tensor, order: Tensor) -> Tensor:
         """Forward pass for Permute"""
-        ctx.save_for_backward(order)
-        return t1._new(t1._tensor.permute(*order))
+        orderList = [int(order[i]) for i in range(order.size)]
+        ctx.save_for_backward(orderList)
+        return t1._new(t1._tensor.permute(*orderList))
 
     @staticmethod
-    def backward(ctx: Context, grad_output: Tensor) -> Tensor:
+    def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, float]:
         """Backward pass for Permute"""
-        (order) = ctx.saved_values
-        new_order = reversed(order)
-        return grad_output._new(grad_output._tensor.permute(*new_order))
+        (order,) = ctx.saved_values
+        new_order = [order.index(i) for i in range(len(order))]
+        return grad_output._new(grad_output._tensor.permute(*new_order)), 0.0
 
 
 class View(Function):

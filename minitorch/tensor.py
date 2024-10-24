@@ -334,8 +334,7 @@ class Tensor:
     def all(self, dim: Optional[int] = None) -> Tensor:
         """Apply the all"""
         if dim is None:
-            size = self._ensure_tensor(self.size)
-            return All.apply(self.contiguous().view(size), self._ensure_tensor(0))
+            return All.apply(self.contiguous().view(self.size), self._ensure_tensor(0))
         else:
             return All.apply(self, self._ensure_tensor(dim))
 
@@ -362,8 +361,7 @@ class Tensor:
     def sum(self, dim: Optional[int] = None) -> Tensor:
         """Apply the sum"""
         if dim is None:
-            size = self._ensure_tensor(self.size)
-            return Sum.apply(self.contiguous().view(size), self._ensure_tensor(0))
+            return Sum.apply(self.contiguous().view(self.size), self._ensure_tensor(0))
         else:
             return Sum.apply(self, self._ensure_tensor(dim))
 
@@ -374,11 +372,11 @@ class Tensor:
 
     def permute(self, *order: int) -> Tensor:
         """Apply the permute"""
-        return Permute.apply(self, tensor(np.array(order, dtype=np.int32)))
+        return Permute.apply(self, tensor(order))
 
-    def view(self, shape: Tensor) -> Tensor:
+    def view(self, *shape: int) -> Tensor:
         """Apply the view"""
-        return View.apply(self, shape)
+        return View.apply(self, tensor(shape))
 
     def zero_grad_(self) -> None:
         """Set .grad to None"""

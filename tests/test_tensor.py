@@ -138,9 +138,9 @@ def test_view() -> None:
     """Test view"""
     t = tensor([[2, 3, 4], [4, 5, 7]])
     assert t.shape == (2, 3)
-    t2 = t.view(6)  # type: ignore
+    t2 = t.view(6)
     assert t2.shape == (6,)
-    t2 = t2.view(1, 6)  # type: ignore
+    t2 = t2.view(1, 6)
     assert t2.shape == (1, 6)
     t2 = t2.view(6, 1)
     assert t2.shape == (6, 1)
@@ -154,7 +154,7 @@ def test_back_view(t1: Tensor) -> None:
 
     def view(a: Tensor) -> Tensor:
         a = a.contiguous()
-        return a.view(a.size)  # type: ignore
+        return a.view(a.size)
 
     grad_check(view, t1)
 
@@ -164,7 +164,7 @@ def test_permute_view() -> None:
     t = tensor([[2, 3, 4], [4, 5, 7]])
     assert t.shape == (2, 3)
     t2 = t.permute(1, 0)
-    t2.view(6)  # type: ignore
+    t2.view(6)
 
 
 @pytest.mark.xfail
