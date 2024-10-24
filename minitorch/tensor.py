@@ -292,7 +292,6 @@ class Tensor:
         return self._tensor.shape
 
     # Functions
-    # TODO: Implement for Task 2.3.
 
     @property
     def size(self) -> int:

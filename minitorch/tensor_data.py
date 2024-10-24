@@ -46,7 +46,6 @@ def index_to_position(index: Index, strides: Strides) -> int:
         Position in storage
 
     """
-    # TODO: Implement for Task 2.1.
     result = 0
     for i in range(len(index)):
         result += index[i] * strides[i]
@@ -67,7 +66,6 @@ def to_index(ordinal: int, shape: Shape, out_index: OutIndex) -> None:
         out_index : return index corresponding to position.
 
     """
-    # TODO: Implement for Task 2.1.
     remaining = ordinal  # Keep tracking the remaining
 
     # Loop over dimensions, from last to first
@@ -97,7 +95,6 @@ def broadcast_index(
         None
 
     """
-    # TODO: Implement for Task 2.2.
     dim_offset = len(big_shape) - len(shape)
 
     for i in range(len(shape)):
@@ -124,8 +121,6 @@ def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
         IndexingError : if cannot broadcast
 
     """
-    # TODO: Implement for Task 2.2.
-
     # Ensuring shape1 is the larger/equal shape
     if len(shape1) < len(shape2):
         shape1, shape2 = shape2, shape1
@@ -295,7 +290,6 @@ class TensorData:
             range(len(self.shape))
         ), f"Must give a position to each dimension. Shape: {self.shape} Order: {order}"
 
-        # TODO: Implement for Task 2.1.
         new_shape = tuple(self._shape[i] for i in order)
         new_strides = tuple(self._strides[i] for i in order)
         return TensorData(self._storage, new_shape, new_strides)

@@ -121,7 +121,7 @@ def render_train_interface(
                     (max_epochs - epoch) * time_per_epoch,
                 )
             )
-        df.append({"epoch": epoch, "loss": total_loss, "correct": correct})
+        df.append({"epoch": epoch, "loss": total_loss, "correct": correct, "time_per_epoch": time_per_epoch})
         st_epoch_stats.write(pd.DataFrame(reversed(df)))
 
         st_epoch_image.plotly_chart(plot())
@@ -136,7 +136,7 @@ def render_train_interface(
             st_epoch_plot.plotly_chart(fig)
 
             print(
-                f"Epoch: {epoch}/{max_epochs}, loss: {total_loss}, correct: {correct}"
+                f"Epoch: {epoch}/{max_epochs}, loss: {total_loss}, correct: {correct}, time_per_epoch: {time_per_epoch}"
             )
 
     if hasattr(train, "train") and st_train_button.button("Train Model"):
